@@ -1,4 +1,5 @@
 import pdb
+from game import Directions
 # search.py
 # ---------
 # Licensing Information:  You are free to use or extend these projects for
@@ -68,17 +69,30 @@ def tinyMazeSearch(problem):
     Returns a sequence of moves that solves tinyMaze.  For any other maze, the
     sequence of moves will be incorrect, so only use this for tinyMaze.
     """
-    from game import Directions
     s = Directions.SOUTH
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def getDirections(parentMap, goal):
-    dir = []
-    for 
+def getDirections(start, dir, parentMap, dst):
+    src = parentMap[dst]
+    xdiff = src[0] - dst[0]
+    ydiff = src[1] - dst[1]
 
-    dir.reverse()
-    return dir
+    #if( (dst==start) or (xdiff==0 and ydiff ==0) ):
+    if( (src==start) or (xdiff==0 and ydiff ==0) ):
+        return dir[:]
+    if(ydiff>0):
+        dir.append(Directions.SOUTH)
+        getDirections(start, dir, parentMap, src)
+    if(ydiff<0):
+        dir.append(Directions.NORTH)
+        getDirections(start, dir, parentMap, src)
+    if(xdiff>0):
+        dir.append(Directions.WEST)
+        getDirections(start, dir, parentMap, src)
+    if(xdiff<0):
+        dir.append(Directions.EAST)
+        getDirections(start, dir, parentMap, src)
 
 def depthFirstSearch(problem):
     """
@@ -132,7 +146,8 @@ def depthFirstSearch(problem):
         else:
             node = fringe.pop()
 
-        moves = getDirections(parentMap, goal)
+    dd = getDirections(problem.startState, moves, parentMap, problem.goal)
+    moves.reverse()
 
     return moves
 
