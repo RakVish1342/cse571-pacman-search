@@ -1,3 +1,4 @@
+import pdb
 # search.py
 # ---------
 # Licensing Information:  You are free to use or extend these projects for
@@ -72,6 +73,13 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
+def getDirections(parentMap, goal):
+    dir = []
+    for 
+
+    dir.reverse()
+    return dir
+
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -86,8 +94,47 @@ def depthFirstSearch(problem):
     print "Is the start a goal?", problem.isGoalState(problem.getStartState())
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    moves = []
+    closedList = []
+    isInFringe = {}
+    parentMap = {}
+
+    fringe = util.Stack()
+    node = problem.getStartState()
+
+    while(1): # any way to write the code so that the exit condition is checked here rather than a while(1) loop?
+
+        #pdb.set_trace()
+        if(problem.isGoalState(node)):
+            # return moves
+            break
+
+        # Update the fringe
+        # make sure the node is not already in the closed set
+        elif( node not in closedList ):
+            #add the node to closed list on getting its fringe
+            successors = problem.getSuccessors(node)
+            closedList.append(node)
+
+            # associate to parent node
+            for s in successors:
+                nd = s[0]
+                # if (nd not in closedList) and (nd not in fringe): # Only if this is a completely new node that is visited, add it. ELSE may get assigned to the wrong parent
+                if ((nd not in isInFringe.keys()) and  (nd not in closedList)):
+                    parentMap[nd] = node
+                    fringe.push(nd)
+                    isInFringe[nd] = 1 # dummy value ... in C++ the condition in the if would be: "isInFringe[nd] > 0" && ...
+                else:
+                    continue
+
+        if ( fringe.isEmpty() ):
+            break
+        else:
+            node = fringe.pop()
+
+        moves = getDirections(parentMap, goal)
+
+    return moves
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""

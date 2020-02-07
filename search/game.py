@@ -44,21 +44,25 @@ class Agent:
         The Agent will receive a GameState (from either {pacman, capture, sonar}.py) and
         must return an action from Directions.{North, South, East, West, Stop}
         """
-        raiseNotDefined()
+        raiseNotDefined() # A function defined in util.py to not do anything if no implementation exists. Used in functions to be implemented by us.
 
 class Directions:
+    # Original directions/Default directions
     NORTH = 'North'
     SOUTH = 'South'
     EAST = 'East'
     WEST = 'West'
     STOP = 'Stop'
 
+    # What the original directions are, once the agent turns left
+    # ie. Agent's north is now global west, etc
     LEFT =       {NORTH: WEST,
                    SOUTH: EAST,
                    EAST:  NORTH,
                    WEST:  SOUTH,
                    STOP:  STOP}
 
+    # Inverted version of left
     RIGHT =      dict([(y,x) for x, y in LEFT.items()])
 
     REVERSE = {NORTH: SOUTH,
