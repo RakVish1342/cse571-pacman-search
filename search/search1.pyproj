@@ -17,7 +17,8 @@
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
     <Environment>
     </Environment>
-    <CommandLineArguments>-l tinyMaze -p SearchAgent -a fn=dfs</CommandLineArguments>
+    <CommandLineArguments>-l mediumDottedMaze -p StayEastSearchAgent</CommandLineArguments>
+    <IsWindowsApplication>False</IsWindowsApplication>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
