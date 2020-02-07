@@ -74,25 +74,30 @@ def tinyMazeSearch(problem):
     return  [s, s, w, s, w, w, s, w]
 
 def getDirections(start, dir, parentMap, dst):
+
+    # End condition of recursion
+    if(dst==start):
+        return dir
+    
     src = parentMap[dst]
     xdiff = src[0] - dst[0]
     ydiff = src[1] - dst[1]
+    if( xdiff==0 and ydiff ==0 ):
+        return dir
 
-    #if( (dst==start) or (xdiff==0 and ydiff ==0) ):
-    if( (src==start) or (xdiff==0 and ydiff ==0) ):
-        return dir[:]
+    # Main portion of recursion
     if(ydiff>0):
         dir.append(Directions.SOUTH)
-        getDirections(start, dir, parentMap, src)
+        return getDirections(start, dir, parentMap, src)
     if(ydiff<0):
         dir.append(Directions.NORTH)
-        getDirections(start, dir, parentMap, src)
+        return getDirections(start, dir, parentMap, src)
     if(xdiff>0):
         dir.append(Directions.WEST)
-        getDirections(start, dir, parentMap, src)
+        return getDirections(start, dir, parentMap, src)
     if(xdiff<0):
         dir.append(Directions.EAST)
-        getDirections(start, dir, parentMap, src)
+        return getDirections(start, dir, parentMap, src)
 
 def depthFirstSearch(problem):
     """
@@ -145,8 +150,9 @@ def depthFirstSearch(problem):
             break
         else:
             node = fringe.pop()
+            isInFringe[nd] = 0 # will be removed from fringe, but then added to closedList in the start of the next loop
 
-    dd = getDirections(problem.startState, moves, parentMap, problem.goal)
+    moves = getDirections(problem.startState, moves, parentMap, problem.goal)
     moves.reverse()
 
     return moves
