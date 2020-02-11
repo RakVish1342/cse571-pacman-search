@@ -290,6 +290,7 @@ class CornersProblem(search.SearchProblem):
         "*** YOUR CODE HERE ***"
         self.startState = self.startingPosition
         self.goal = self.corners[0]
+        self.isCornersProblem = True
 
     def getStartState(self):
         """
@@ -304,18 +305,15 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        #if(state==(5,5)):
-        #    return 1
-        if(state in self.corners):
-            #pick next closest goal and set start state to current goal
-            #return 0
-            # how will pacman traverse the same paths again in bfs though? Need to clear closedList and fringe and parentMap?
-
-
-            #if all corners visted
-                #return 1
-            return 1
-
+        closedList = state # the state being passed is the closedList
+        goalReached = True
+        for corn in corners:
+            if (corn not in closedList):
+                goalReached = False
+                break
+        
+        return goalReached
+            
     def getSuccessors(self, state):
         """
         Returns successor states, the actions they require, and a cost of 1.

@@ -203,13 +203,54 @@ def singleGoalBFS(problem):
 
 def multiGoalBFS(problem):
     moves = []
+    closedList = []
+    isInFringe = {}
 
+    #TODO optimize the order of taking corners
+
+    parentMap = {} #TODO parentMap needed for each corner
+
+    fringe = util.Queue()
+    node = problem.getStartState()
+    while(1): # any way to write the code so that the exit condition is checked here rather than a while(1) loop?
+
+        #pdb.set_trace()
+        if(problem.isGoalState(closedList)):
+            # return moves
+            break
+
+        # Update the fringe
+        # make sure the node is not already in the closed set
+        elif( node not in closedList ):
+            #add the node to closed list on getting its fringe
+            successors = problem.getSuccessors(node)
+            closedList.append(node)
+
+            # associate to parent node
+            for s in successors:
+                nd = s[0]
+                # if (nd not in closedList) and (nd not in fringe): # Only if this is a completely new node that is visited, add it. ELSE may get assigned to the wrong parent
+                if ((nd not in isInFringe.keys()) and  (nd not in closedList)):
+                    parentMap[nd] = node
+                    fringe.push(nd)
+                    isInFringe[nd] = 1 # dummy value ... in C++ the condition in the if would be: "isInFringe[nd] > 0" && ...
+                else:
+                    continue
+
+        if ( fringe.isEmpty() ):
+            break
+        else:
+            node = fringe.pop()
+            isInFringe[nd] = 0 # will be removed from fringe, but then added to closedList in the start of the next loop
+
+    moves = getDirections(problem.startState, moves, parentMap, problem.goal)
+    moves.reverse()
     return moves
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
 
-    if(hasattr(problem, 'isCorners')):
+    if(hasattr(problem, 'isCornersProblem') and problem.isCornersProblem):
         return multiGoalBFS(problem)
     else:
         return singleGoalBFS(problem)
