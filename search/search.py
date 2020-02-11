@@ -157,8 +157,7 @@ def depthFirstSearch(problem):
 
     return moves
 
-def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
+def singleGoalBFS(problem):
     moves = []
     closedList = []
     isInFringe = {}
@@ -166,7 +165,6 @@ def breadthFirstSearch(problem):
 
     fringe = util.Queue()
     node = problem.getStartState()
-
     while(1): # any way to write the code so that the exit condition is checked here rather than a while(1) loop?
 
         #pdb.set_trace()
@@ -202,6 +200,20 @@ def breadthFirstSearch(problem):
     moves.reverse()
 
     return moves
+
+def multiGoalBFS(problem):
+    moves = []
+
+    return moves
+
+def breadthFirstSearch(problem):
+    """Search the shallowest nodes in the search tree first."""
+
+    if(hasattr(problem, 'isCorners')):
+        return multiGoalBFS(problem)
+    else:
+        return singleGoalBFS(problem)
+
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""

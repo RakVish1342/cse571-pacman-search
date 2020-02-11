@@ -288,6 +288,8 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.startState = self.startingPosition
+        self.goal = self.corners[0]
 
     def getStartState(self):
         """
@@ -295,14 +297,24 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.startingPosition
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #if(state==(5,5)):
+        #    return 1
+        if(state in self.corners):
+            #pick next closest goal and set start state to current goal
+            #return 0
+            # how will pacman traverse the same paths again in bfs though? Need to clear closedList and fringe and parentMap?
+
+
+            #if all corners visted
+                #return 1
+            return 1
 
     def getSuccessors(self, state):
         """
@@ -325,9 +337,17 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
+            x,y = state
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                successors.append( ( (nextx, nexty), action, 1) )
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
+
+        #successors.append( ((5,5), Directions.EAST, 1) )
+        #return successors
 
     def getCostOfActions(self, actions):
         """
