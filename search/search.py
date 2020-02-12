@@ -152,12 +152,20 @@ def depthFirstSearch(problem):
             node = fringe.pop()
             isInFringe[nd] = 0 # will be removed from fringe, but then added to closedList in the start of the next loop
 
-    moves = getDirections(problem.startState, moves, parentMap, problem.goal)
+    moves = getDirections(problem.getStartState(), moves, parentMap, problem.goal)
     moves.reverse()
 
     return moves
 
 def singleGoalBFS(problem):
+
+    """
+    While using autograder, the "problem" variable does not have access to the goal state. It can only check
+    if a given node is the goal state. So, can not provide goal to the parentMap to get path to goal 
+    by retracing steps. Instead, need to have a different way of keep track of path to goal. Should make use of
+    getSuccessors() (and the direction that it returns as one of the args) 
+    """
+
     moves = []
     closedList = []
     isInFringe = {}
@@ -197,7 +205,7 @@ def singleGoalBFS(problem):
             isInFringe[nd] = 0 # will be removed from fringe, but then added to closedList in the start of the next loop
             #TODO correct the above line to isInFringe[node] = 0
 
-    moves = getDirections(problem.startState, moves, parentMap, problem.goal)
+    moves = getDirections(problem.getStartState(), moves, parentMap, problem.goal)
     moves.reverse()
 
     return moves
