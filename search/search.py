@@ -166,47 +166,37 @@ def singleGoalBFS(problem):
     getSuccessors() (and the direction that it returns as one of the args) 
     """
 
-    moves = []
-    closedList = []
-    isInFringe = {}
-    parentMap = {}
+    moves = [] # move to goal from start state
+    closedList = [] # All explored/expanded nodes
+    isInFringe = {} # All nodes explored and being considered, with state of being in fringe currently or not
 
     fringe = util.Queue()
-    node = problem.getStartState()
-    while(1): # any way to write the code so that the exit condition is checked here rather than a while(1) loop?
+    fringe.push( (problem.getStartState(), moves) ) # Let fringe not only hold nodes to explore, but path/moves to that node from startState
+    while(not fringe.isEmpty()):
 
-        #pdb.set_trace()
+        node, currMoves = fringe.pop()
+        isInFringe[node] = 0
+
         if(problem.isGoalState(node)):
-            # return moves
+            moves = currMoves
             break
 
         # Update the fringe
-        # make sure the node is not already in the closed set
+        # make sure the node is not already in the closedList 
+        # AND as per specs of this problem: ensure node not currently being concidered in Fringe
+        # ie. don't readd to a node to fringe if in closedList or already in fringe
         elif( node not in closedList ):
-            #add the node to closed list on getting its fringe
             successors = problem.getSuccessors(node)
-            closedList.append(node)
+            closedList.append(node) # add the node to closed list on getting its fringe
 
-            # associate to parent node
             for s in successors:
-                nd = s[0]
-                # if (nd not in closedList) and (nd not in fringe): # Only if this is a completely new node that is visited, add it. ELSE may get assigned to the wrong parent
+                nd = s[0] # successor node
+                mv = s[1] # move to the successor node from current node
+                cst = s[2] # cost to successor node
+
                 if ((nd not in isInFringe.keys()) and  (nd not in closedList)):
-                    parentMap[nd] = node
-                    fringe.push(nd)
-                    isInFringe[nd] = 1 # dummy value ... in C++ the condition in the if would be: "isInFringe[nd] > 0" && ...
-                else:
-                    continue
-
-        if ( fringe.isEmpty() ):
-            break
-        else:
-            node = fringe.pop()
-            isInFringe[nd] = 0 # will be removed from fringe, but then added to closedList in the start of the next loop
-            #TODO correct the above line to isInFringe[node] = 0
-
-    moves = getDirections(problem.getStartState(), moves, parentMap, problem.goal)
-    moves.reverse()
+                    fringe.push( (nd, currMoves+[mv]) )
+                    isInFringe[nd] = 1
 
     return moves
 
