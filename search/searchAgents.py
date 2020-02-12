@@ -336,13 +336,15 @@ class CornersProblem(search.SearchProblem):
             # needs global self.moves variable that is passed back and forth from the BFS func to this function
             # Anything else
             print ("YAY1")
+            src = self.startState
             shortestLen = 999999
             for corn in self.corners:
-                moves = self.getDirections(self.getStartState, [], self.parentMap, corn)
+                moves = self.getDirections(src, [], corn)
                 if (len(moves) < shortestLen):
                     closestCorner = corn # store the length of the moves as keys. Later, just pick smallest key
                     shortestMoves = moves
-            self.allMoves.append( shortestMoves ) # append smallest key AKA smallest path
+            #self.allMoves.append( shortestMoves ) # append smallest key AKA smallest path
+            self.allMoves = self.allMoves + shortestMoves # Need to concatenate lists. Not make list of list
             
             # Now, update the new startState and send it to search
             self.currentStartState = closestCorner # will be useful later to provide startState in getDirections in the next state

@@ -246,7 +246,8 @@ def multiGoalBFS(problem):
             node = fringe.pop()
             problem.isInFringe[node] = 0 # will be removed from fringe, but then added to closedList in the start of the next loop
 
-    return problem.allMoves
+    ret = problem.allMoves
+    return ret
 
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
