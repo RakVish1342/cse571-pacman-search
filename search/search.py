@@ -195,6 +195,7 @@ def singleGoalBFS(problem):
         else:
             node = fringe.pop()
             isInFringe[nd] = 0 # will be removed from fringe, but then added to closedList in the start of the next loop
+            #TODO correct the above line to isInFringe[node] = 0
 
     moves = getDirections(problem.startState, moves, parentMap, problem.goal)
     moves.reverse()
@@ -238,13 +239,22 @@ def multiGoalBFS(problem):
                     continue
 
         if ( fringe.isEmpty() ):
-            break
+            # No path found
+            if(not problem.isGoalState(closedList)):
+                moves = [] # do not perform any action
+                print("***************************************************************************** NO PATH FOUND")
+                break
+            # Path found
+            else:
+                break # break with given/calculated moves
+
         else:
             node = fringe.pop()
-            isInFringe[nd] = 0 # will be removed from fringe, but then added to closedList in the start of the next loop
+            isInFringe[node] = 0 # will be removed from fringe, but then added to closedList in the start of the next loop
 
-    moves = getDirections(problem.startState, moves, parentMap, problem.goal)
-    moves.reverse()
+    #moves = getDirections(problem.startState, moves, parentMap, problem.goal)
+    #moves.reverse()
+
     return moves
 
 def breadthFirstSearch(problem):

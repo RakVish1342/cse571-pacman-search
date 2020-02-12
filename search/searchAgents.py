@@ -307,10 +307,15 @@ class CornersProblem(search.SearchProblem):
         "*** YOUR CODE HERE ***"
         closedList = state # the state being passed is the closedList
         goalReached = True
-        for corn in corners:
+        print("dummy")
+        for corn in self.corners:
             if (corn not in closedList):
                 goalReached = False
                 break
+        #FORNOW ensuring all four corners are reached in the closedList before stating that goal has been met.
+        # Thus also ignoring accuracy of parentMap generated
+        #TODO adding some way of triggering a new parentMap for corner to corner traversal, for each new corner
+        #TODO ensuring with each new corner that is to be visited the shortest path to that corner is selected
         
         return goalReached
             
