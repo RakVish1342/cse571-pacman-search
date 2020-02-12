@@ -291,6 +291,12 @@ class CornersProblem(search.SearchProblem):
         self.startState = self.startingPosition
         self.goal = self.corners[0]
         self.isCornersProblem = True
+        self.allMoves = []
+        self.currentStartState = self.startState
+        self.parentMap = {}
+        self.closedList = []
+        self.isInFringe = {}
+
 
     def getStartState(self):
         """
@@ -300,24 +306,56 @@ class CornersProblem(search.SearchProblem):
         "*** YOUR CODE HERE ***"
         return self.startingPosition
 
-    def isGoalState(self, state):
+    def isGoalState(self, state, moves):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
         closedList = state # the state being passed is the closedList
-        goalReached = True
+
+        isFinalGoalState = False
+        startToFourCorners = True
+        fourthToThirdCorner = False
+        thirdToTwoCorners = False
+        twoToLastCorner = False
         print("dummy")
         for corn in self.corners:
             if (corn not in closedList):
-                goalReached = False
+                startToFourCorners = False
                 break
+
         #FORNOW ensuring all four corners are reached in the closedList before stating that goal has been met.
         # Thus also ignoring accuracy of parentMap generated
         #TODO adding some way of triggering a new parentMap for corner to corner traversal, for each new corner
         #TODO ensuring with each new corner that is to be visited the shortest path to that corner is selected
-        
-        return goalReached
+
+        # Once all corners reached, pick the path to the closest corner
+        if (startToFourCorners):
+            # Needs parentMap
+            # needs global self.moves variable that is passed back and forth from the BFS func to this function
+            # Anything else
+            print ("YAY1")
+            shortestLen = 999999
+            for corn in self.corners:
+                moves = self.getDirections(self.getStartState, [], parentMap, corn)
+                if (len(moves) < shortestLen):
+                    closestCorner = corn # store the length of the moves as keys. Later, just pick smallest key
+                    shortestMoves = moves
+            self.allMoves.append( shortestMoves ) # append smallest key AKA smallest path
+            
+            # Now, update the new startState and send it to search
+            self.currentStartState = closestCorner # will be useful later to provide startState in getDirections in the next state
+            # Reset the parentMap, closedList, isInFringe
+            self.parentMap = {}
+            self.closedList = []
+
+
+
+        if(startToFourCorners and fourthToThirdCorner and thirdToTwoCorners and twoToLastCorner):
+            isFinalGoalState = True
+
+        #return startToFourCorners
+        return isFinalGoalState
             
     def getSuccessors(self, state):
         """
@@ -365,6 +403,31 @@ class CornersProblem(search.SearchProblem):
             if self.walls[x][y]: return 999999
         return len(actions)
 
+    def getDirections(start, dir, parentMap, dst):
+
+        # End condition of recursion
+        if(dst==start):
+            return dir
+    
+        src = parentMap[dst]
+        xdiff = src[0] - dst[0]
+        ydiff = src[1] - dst[1]
+        if( xdiff==0 and ydiff ==0 ):
+            return dir
+
+        # Main portion of recursion
+        if(ydiff>0):
+            dir.append(Directions.SOUTH)
+            return getDirections(start, dir, parentMap, src)
+        if(ydiff<0):
+            dir.append(Directions.NORTH)
+            return getDirections(start, dir, parentMap, src)
+        if(xdiff>0):
+            dir.append(Directions.WEST)
+            return getDirections(start, dir, parentMap, src)
+        if(xdiff<0):
+            dir.append(Directions.EAST)
+            return getDirections(start, dir, parentMap, src)
 
 def cornersHeuristic(state, problem):
     """
