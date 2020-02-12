@@ -306,12 +306,12 @@ class CornersProblem(search.SearchProblem):
         "*** YOUR CODE HERE ***"
         return self.startingPosition
 
-    def isGoalState(self, state, moves):
+    def isGoalState(self):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        closedList = state # the state being passed is the closedList
+        #closedList = state # the state being passed is the closedList  ### NOT needed anymore. Added as a member of problem
 
         isFinalGoalState = False
         startToFourCorners = True
@@ -319,8 +319,9 @@ class CornersProblem(search.SearchProblem):
         thirdToTwoCorners = False
         twoToLastCorner = False
         print("dummy")
+
         for corn in self.corners:
-            if (corn not in closedList):
+            if (corn not in self.closedList):
                 startToFourCorners = False
                 break
 
@@ -337,7 +338,7 @@ class CornersProblem(search.SearchProblem):
             print ("YAY1")
             shortestLen = 999999
             for corn in self.corners:
-                moves = self.getDirections(self.getStartState, [], parentMap, corn)
+                moves = self.getDirections(self.getStartState, [], self.parentMap, corn)
                 if (len(moves) < shortestLen):
                     closestCorner = corn # store the length of the moves as keys. Later, just pick smallest key
                     shortestMoves = moves
@@ -350,8 +351,11 @@ class CornersProblem(search.SearchProblem):
             self.closedList = []
 
 
+        # Add conditions to run other cases
 
-        if(startToFourCorners and fourthToThirdCorner and thirdToTwoCorners and twoToLastCorner):
+
+        #if(startToFourCorners and fourthToThirdCorner and thirdToTwoCorners and twoToLastCorner):
+        if(startToFourCorners):# and fourthToThirdCorner and thirdToTwoCorners and twoToLastCorner):
             isFinalGoalState = True
 
         #return startToFourCorners
@@ -403,13 +407,13 @@ class CornersProblem(search.SearchProblem):
             if self.walls[x][y]: return 999999
         return len(actions)
 
-    def getDirections(start, dir, parentMap, dst):
+    def getDirections(self, start, dir, dst):
 
         # End condition of recursion
         if(dst==start):
             return dir
     
-        src = parentMap[dst]
+        src = self.parentMap[dst]
         xdiff = src[0] - dst[0]
         ydiff = src[1] - dst[1]
         if( xdiff==0 and ydiff ==0 ):
@@ -418,16 +422,16 @@ class CornersProblem(search.SearchProblem):
         # Main portion of recursion
         if(ydiff>0):
             dir.append(Directions.SOUTH)
-            return getDirections(start, dir, parentMap, src)
+            return self.getDirections(start, dir, src)
         if(ydiff<0):
             dir.append(Directions.NORTH)
-            return getDirections(start, dir, parentMap, src)
+            return self.getDirections(start, dir, src)
         if(xdiff>0):
             dir.append(Directions.WEST)
-            return getDirections(start, dir, parentMap, src)
+            return self.getDirections(start, dir, src)
         if(xdiff<0):
             dir.append(Directions.EAST)
-            return getDirections(start, dir, parentMap, src)
+            return self.getDirections(start, dir, src)
 
 def cornersHeuristic(state, problem):
     """
