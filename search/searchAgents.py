@@ -285,83 +285,33 @@ class CornersProblem(search.SearchProblem):
             if not startingGameState.hasFood(*corner):
                 print 'Warning: no food in corner ' + str(corner)
         self._expanded = 0 # DO NOT CHANGE; Number of search nodes expanded
-        # Please add any code here which you would like to use
-        # in initializing the problem
-        "*** YOUR CODE HERE ***"
-        self.startState = self.startingPosition
-        self.currentStartState = self.startState
-        self.goal = self.corners[0]
-        self.isMultiGoalProblem = True
-        self.allMoves = []
-        self.parentMap = {}
-        self.closedList = []
-        self.isInFringe = {}
-
+        #visitedCorners = []
 
     def getStartState(self):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
-        Changes each time the objective/goal changes when going from one corner to the next
         """
-        return self.currentStartState
+        visitedCorners = []
+        startNode = (self.startingPosition, visitedCorners)
+        return startNode
 
-    def isGoalState(self):
+    def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        "*** YOUR CODE HERE ***"
-        #closedList = state # the state being passed is the closedList  ### NOT needed anymore. Added as a member of problem
+        node = state
+        visitedCorners = node[1]
 
-        isFinalGoalState = False
-        startToFourCorners = True
-        fourthToThirdCorner = False
-        thirdToTwoCorners = False
-        twoToLastCorner = False
-        print("dummy")
+        # Also edits the node if it has reached a corner
+        # This will not work if the node/state being passed here is a copy rather than a reference to the same node
+        #if (node[0] in self.corners):
+        #    corner = node[0]
+        #    node = (node[0], visitedCorners+[corner])
+        # So, implementing this in the getSuccessor function since it is the only function that
+        # returns node states to search.py. So any kind of need required can be passed back
 
-        for corn in self.corners:
-            if (corn not in self.closedList):
-                startToFourCorners = False
-                break
-
-        #FORNOW ensuring all four corners are reached in the closedList before stating that goal has been met.
-        # Thus also ignoring accuracy of parentMap generated
-        #TODO adding some way of triggering a new parentMap for corner to corner traversal, for each new corner
-        #TODO ensuring with each new corner that is to be visited the shortest path to that corner is selected
-
-        # Once all corners reached, pick the path to the closest corner
-        if (startToFourCorners):
-            # Needs parentMap
-            # needs global self.moves variable that is passed back and forth from the BFS func to this function
-            # Anything else
-            print ("YAY1")
-            src = self.startState
-            shortestLen = 999999
-            for corn in self.corners:
-                moves = self.getDirections(src, [], corn)
-                if (len(moves) < shortestLen):
-                    closestCorner = corn # store the length of the moves as keys. Later, just pick smallest key
-                    shortestMoves = moves
-            #self.allMoves.append( shortestMoves ) # append smallest key AKA smallest path
-            self.allMoves = self.allMoves + shortestMoves # Need to concatenate lists. Not make list of list
-            
-            # Now, update the new startState and send it to search
-            self.currentStartState = closestCorner # will be useful later to provide startState in getDirections in the next state
-            # Reset the parentMap, closedList, isInFringe
-            self.parentMap = {}
-            self.closedList = []
-
-
-        # Add conditions to run other cases
-
-
-        #if(startToFourCorners and fourthToThirdCorner and thirdToTwoCorners and twoToLastCorner):
-        if(startToFourCorners):# and fourthToThirdCorner and thirdToTwoCorners and twoToLastCorner):
-            isFinalGoalState = True
-
-        #return startToFourCorners
-        return isFinalGoalState
+        return len(visitedCorners) == 4 # If four corners have been visited by the current node/path, then goal has been met
             
     def getSuccessors(self, state):
         """
@@ -373,6 +323,8 @@ class CornersProblem(search.SearchProblem):
             state, 'action' is the action required to get there, and 'stepCost'
             is the incremental cost of expanding to that successor
         """
+        node = state
+        visitedCorners = node[1]
 
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
@@ -382,19 +334,19 @@ class CornersProblem(search.SearchProblem):
             #   dx, dy = Actions.directionToVector(action)
             #   nextx, nexty = int(x + dx), int(y + dy)
             #   hitsWall = self.walls[nextx][nexty]
-
-            "*** YOUR CODE HERE ***"
-            x,y = state
+            x,y = node[0]
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
+            nextNode = (nextx, nexty)
             if not self.walls[nextx][nexty]:
-                successors.append( ( (nextx, nexty), action, 1) )
+                # Also check if next node is a corner. If so pass back node with updated visitedCorner state
+                if nextNode in self.corners:
+                    successors.append( ( (nextNode, visitedCorners+[nextNode]), action, 1) )
+                else:
+                    successors.append( ( (nextNode, visitedCorners), action, 1) )
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
-
-        #successors.append( ((5,5), Directions.EAST, 1) )
-        #return successors
 
     def getCostOfActions(self, actions):
         """
@@ -408,32 +360,6 @@ class CornersProblem(search.SearchProblem):
             x, y = int(x + dx), int(y + dy)
             if self.walls[x][y]: return 999999
         return len(actions)
-
-    def getDirections(self, start, dir, dst):
-
-        # End condition of recursion
-        if(dst==start):
-            return dir
-    
-        src = self.parentMap[dst]
-        xdiff = src[0] - dst[0]
-        ydiff = src[1] - dst[1]
-        if( xdiff==0 and ydiff ==0 ):
-            return dir
-
-        # Main portion of recursion
-        if(ydiff>0):
-            dir.append(Directions.SOUTH)
-            return self.getDirections(start, dir, src)
-        if(ydiff<0):
-            dir.append(Directions.NORTH)
-            return self.getDirections(start, dir, src)
-        if(xdiff>0):
-            dir.append(Directions.WEST)
-            return self.getDirections(start, dir, src)
-        if(xdiff<0):
-            dir.append(Directions.EAST)
-            return self.getDirections(start, dir, src)
 
 def cornersHeuristic(state, problem):
     """

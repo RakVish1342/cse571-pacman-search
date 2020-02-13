@@ -73,32 +73,6 @@ def tinyMazeSearch(problem):
     w = Directions.WEST
     return  [s, s, w, s, w, w, s, w]
 
-def getDirections(start, dir, parentMap, dst):
-
-    # End condition of recursion
-    if(dst==start):
-        return dir
-    
-    src = parentMap[dst]
-    xdiff = src[0] - dst[0]
-    ydiff = src[1] - dst[1]
-    if( xdiff==0 and ydiff ==0 ):
-        return dir
-
-    # Main portion of recursion
-    if(ydiff>0):
-        dir.append(Directions.SOUTH)
-        return getDirections(start, dir, parentMap, src)
-    if(ydiff<0):
-        dir.append(Directions.NORTH)
-        return getDirections(start, dir, parentMap, src)
-    if(xdiff>0):
-        dir.append(Directions.WEST)
-        return getDirections(start, dir, parentMap, src)
-    if(xdiff<0):
-        dir.append(Directions.EAST)
-        return getDirections(start, dir, parentMap, src)
-
 def depthFirstSearch(problem):
     """
     Search the deepest nodes in the search tree first.
@@ -194,60 +168,31 @@ def singleGoalBFS(problem):
 
     return moves
 
-def multiGoalBFS(problem):
-
-    #TODO optimize the order of taking corners
-
-    fringe = util.Queue()
-    node = problem.getStartState()
-    while(1): # any way to write the code so that the exit condition is checked here rather than a while(1) loop?
-
-        if(problem.isGoalState()):
-            # return moves
-            break
-
-        # Update the fringe
-        # make sure the node is not already in the closed set
-        elif( node not in problem.closedList ):
-            #add the node to closed list on getting its fringe
-            successors = problem.getSuccessors(node)
-            problem.closedList.append(node)
-
-            # associate to parent node
-            for s in successors:
-                nd = s[0]
-                # if (nd not in closedList) and (nd not in fringe): # Only if this is a completely new node that is visited, add it. ELSE may get assigned to the wrong parent
-                if ((nd not in problem.isInFringe.keys()) and  (nd not in problem.closedList)):
-                    problem.parentMap[nd] = node
-                    fringe.push(nd)
-                    problem.isInFringe[nd] = 1 # dummy value ... in C++ the condition in the if would be: "isInFringe[nd] > 0" && ...
-                else:
-                    continue
-
-        if ( fringe.isEmpty() ):
-            # No path found
-            if(not problem.isGoalState()):
-                moves = [] # do not perform any action
-                print("***************************************************************************** NO PATH FOUND")
-                break
-            # Path found
-            else:
-                break # break with given/calculated moves
-
-        else:
-            node = fringe.pop()
-            problem.isInFringe[node] = 0 # will be removed from fringe, but then added to closedList in the start of the next loop
-
-    ret = problem.allMoves
-    return ret
-
 def breadthFirstSearch(problem):
-    """Search the shallowest nodes in the search tree first."""
+    """
+    Search the shallowest nodes in the search tree first.
+    """
+    # Deleted multiStageBFS
+    # Can not track each corner sequentially by making each corner reached as new start state. 
+    # This would be equivalent to saying find first corner and from there start finding next closest corner till all corners found
+    # Such logic would not lead to shortest path through all four corners. Seen easily in tinyCorners, 
+    # that it would follow a different route than that which we would use if we were to manually control the agent
+    # SO, need to allow all paths to be explored continuously/in parallel, and stopping when one of them hits all four corners
+    # ie. keep letting multiple paths explore the maze in parallel till one of them reports via isGoalState() that it hit all four corners
+    # The first to report such an event would be the shortest path through all corners.
 
-    if(hasattr(problem, 'isMultiGoalProblem') and problem.isMultiGoalProblem):
-        return multiGoalBFS(problem)
-    else:
-        return singleGoalBFS(problem)
+    # So, 
+    # 1. need to change isGoalState to track number of corners each path has visited so far
+    # 2. AKA. need to encode corners visited into the "node state"/each path 
+    # 3. Need to allow retracing of steps at deadends...ie. change closedList condition?
+    # Now since nodes will be represented with two states (coordinate, cornersVisited) = ((x,y), [cornersVisited])
+    # Once the path goes into a deadend, if that deadend is a "useful deadend" (ie. one with food/corner of desire), then there is a good 
+    # reason for the pacman to return/retrace its steps. And this will be allowed by the closedList since on reaching the corner
+    # node state will change and include a corner in the cornersVisited list. Thus that specific changed form of the node will
+    # not exist in the closedList and the successor nodes to retrace the deadend path if the deadend led to a corner will be allowed/
+    # will pass the "node not in closedList" test
+
+    return singleGoalBFS(problem)
 
 
 def uniformCostSearch(problem):
