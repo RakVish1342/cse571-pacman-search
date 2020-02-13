@@ -392,6 +392,7 @@ def cornersHeuristic(state, problem):
     lengthy = ymax - ymin
 
     nd = state[0]
+    visitedCorners = state[1]
     # Try to stay at the edge of the maze as much as possible
     # ie. minimal cost if dist to edge is minimal
     # distFromCenter = ( (float(nd[0])-lengthx/2)**2 + (float(nd[1])-lengthy/2)**2 )**(0.5) / ( (xmax-xmin)**2 + (ymax-ymin)**2 )**(0.5) # normalized dist to the edge
@@ -412,7 +413,8 @@ def cornersHeuristic(state, problem):
     # 3. Is consistent and admissible of course, since it assumes walls are not a barrier. So always <= actual path cost
     cost = 0
     for corn in corners:
-        cost = cost + util.manhattanDistance(nd, corn)
+        if corn not in visitedCorners:
+            cost = cost + util.manhattanDistance(nd, corn)
     cost = cost/len(corners)
     return cost
 
