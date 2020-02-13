@@ -1,4 +1,4 @@
-Starting on 2-13 at 10:55:58
+Starting on 2-13 at 11:35:46
 
 Question q1
 ===========
@@ -156,11 +156,11 @@ Question q7
 *** PASS: test_cases\q7\food_heuristic_7.test
 *** PASS: test_cases\q7\food_heuristic_8.test
 *** PASS: test_cases\q7\food_heuristic_9.test
-*** FAIL: test_cases\q7\food_heuristic_grade_tricky.test
-***     expanded nodes: 12372
+*** PASS: test_cases\q7\food_heuristic_grade_tricky.test
+***     expanded nodes: 4137
 ***     thresholds: [15000, 12000, 9000, 7000]
 
-### Question q7: 2/4 ###
+### Question q7: 5/4 ###
 
 
 Question q8
@@ -168,13 +168,13 @@ Question q8
 
 [SearchAgent] using function depthFirstSearch
 [SearchAgent] using problem type PositionSearchProblem
-*** Method not implemented: findPathToClosestDot at line 573 of searchAgents.py
+*** Method not implemented: findPathToClosestDot at line 579 of searchAgents.py
 *** FAIL: Terminated with a string exception.
 
 ### Question q8: 0/3 ###
 
 
-Finished at 11:01:33
+Finished at 11:37:57
 
 Provisional grades
 ==================
@@ -184,10 +184,10 @@ Question q3: 3/3
 Question q4: 3/3
 Question q5: 3/3
 Question q6: 2/3
-Question q7: 2/4
+Question q7: 5/4
 Question q8: 0/3
 ------------------
-Total: 19/25
+Total: 22/25
 
 Your grades are NOT yet registered.  To register your grades, make sure
 to follow your instructor's guidelines to receive credit on your project.

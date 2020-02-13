@@ -529,16 +529,22 @@ def foodHeuristic(state, problem):
 
     # Attempting min of manhattanDists to all food locations
     # Yields: 13898 node expansions in 35.5sec on trickyMaze ("-l trickySearch -p AStarFoodSearchAgent")
-    #dists = [util.manhattanDistance(node, food) for food in problem.heuristicInfo['foodLocations']]
+    # dists = [util.manhattanDistance(node, food) for food in problem.heuristicInfo['foodLocations']]
 
     # Attempting min of mazeDists using helper function given below
-    # Yields: 12372 node expansions in 3min on trickyMaze ("-l trickySearch -p AStarFoodSearchAgent")
+    # Yields: 12372 node expansions in 340sec (~5.5min) on trickyMaze ("-l trickySearch -p AStarFoodSearchAgent")
+    # dists = [mazeDistance(node, food, problem.startingGameState) for food in problem.heuristicInfo['foodLocations']]
+
+    # Attempting just (not min) mazeDists using helper function given below
+    # Yields: 12372 node expansions in 340sec (~5.5min) on trickyMaze ("-l trickySearch -p AStarFoodSearchAgent")
     dists = [mazeDistance(node, food, problem.startingGameState) for food in problem.heuristicInfo['foodLocations']]
     if len(dists) == 0:
         cost = 0
     else:
-        cost = min( dists )
-
+        #cost = min( dists )
+        # Using max of dists from curr position to remainig food is a better heuristic.
+        # Yields: Just 4137 node expansions in 129.7sec
+        cost = max( dists )
     return cost
 
 class ClosestDotSearchAgent(SearchAgent):
