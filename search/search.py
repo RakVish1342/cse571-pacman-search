@@ -155,7 +155,6 @@ def depthFirstSearch(problem):
 
     return moves
 
-
 def singleGoalBFS(problem):
     """
     While using autograder, the "problem" variable does not have access to the goal state. It can only check
@@ -191,9 +190,10 @@ def singleGoalBFS(problem):
                 mv = s[1] # move to the successor node from current node
                 cst = s[2] # cost to successor node
 
-                if ((nd not in isInFringe.keys()) and  (nd not in closedList)):
-                    fringe.push( (nd, currMoves+[mv]) )
-                    isInFringe[nd] = 1
+                # if ((nd not in isInFringe.keys()) and  (nd not in closedList)):
+                # Condition not needed. Explanation in DFS algo
+                fringe.push( (nd, currMoves+[mv]) )
+                isInFringe[nd] = 1
 
     return moves
 
@@ -285,9 +285,8 @@ def uniformCostSearch(problem):
                 mv = s[1] # move to the successor node from current node
                 cst = s[2] # cost to successor node
 
-                if ((nd not in isInFringe.keys()) and  (nd not in closedList)):
-                    fringe.push( (nd, currMoves+[mv]), cst )
-                    isInFringe[nd] = 1
+                fringe.push( (nd, currMoves+[mv]), cst )
+                isInFringe[nd] = 1
 
     return moves
 
@@ -330,12 +329,11 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 mv = s[1] # move to the successor node from current node
                 cst = s[2] # cost to successor node
 
-                if ((nd not in isInFringe.keys()) and  (nd not in closedList)):
-                    updatedMoves = currMoves + [mv]
-                    cst = problem.getCostOfActions(updatedMoves) # cost from start till curr node
-                    heu = heuristic(nd, problem) # heuristic of curr node (to goal ofc.)
-                    fringe.push( (nd, updatedMoves), cst+heu )
-                    isInFringe[nd] = 1
+                updatedMoves = currMoves + [mv]
+                cst = problem.getCostOfActions(updatedMoves) # cost from start till curr node
+                heu = heuristic(nd, problem) # heuristic of curr node (to goal ofc.)
+                fringe.push( (nd, updatedMoves), cst+heu )
+                isInFringe[nd] = 1
 
     return moves
 
