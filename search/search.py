@@ -141,9 +141,17 @@ def depthFirstSearch(problem):
                 mv = s[1] # move to the successor node from current node
                 cst = s[2] # cost to successor node
 
-                if ((nd not in isInFringe.keys()) and  (nd not in closedList)):
-                    fringe.push( (nd, currMoves+[mv]) )
-                    isInFringe[nd] = 1
+                # if ((nd not in isInFringe.keys()) and  (nd not in closedList)):
+                # This condition is not required. We can add the node again to fringe (ie to the top of the fringe)
+                # This would mean, this latest path through which a node is being visited will be at the top of the
+                # fringe/stack. The older entry for the node (if any will also be there in the fringe). Which of these
+                # two entries gets expanded will depend on the search algo. If it is DFS, the latest value will get
+                # expanded. If it is BFS the older value will get expanded. 
+                # HOWEVER, this still is uses a valid "graph search" technique of visiting a node only once, since 
+                # the elif (node not in closedList) condition above will prevent any action from being taken if the 
+                # node is revisited
+                fringe.push( (nd, currMoves+[mv]) )
+                isInFringe[nd] = 1
 
     return moves
 
@@ -239,7 +247,7 @@ def multiGoalBFS(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
 
-    if(hasattr(problem, 'isCornersProblem') and problem.isCornersProblem):
+    if(hasattr(problem, 'isMultiGoalProblem') and problem.isMultiGoalProblem):
         return multiGoalBFS(problem)
     else:
         return singleGoalBFS(problem)

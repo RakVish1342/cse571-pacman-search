@@ -289,10 +289,10 @@ class CornersProblem(search.SearchProblem):
         # in initializing the problem
         "*** YOUR CODE HERE ***"
         self.startState = self.startingPosition
-        self.goal = self.corners[0]
-        self.isCornersProblem = True
-        self.allMoves = []
         self.currentStartState = self.startState
+        self.goal = self.corners[0]
+        self.isMultiGoalProblem = True
+        self.allMoves = []
         self.parentMap = {}
         self.closedList = []
         self.isInFringe = {}
@@ -302,9 +302,9 @@ class CornersProblem(search.SearchProblem):
         """
         Returns the start state (in your state space, not the full Pacman state
         space)
+        Changes each time the objective/goal changes when going from one corner to the next
         """
-        "*** YOUR CODE HERE ***"
-        return self.startingPosition
+        return self.currentStartState
 
     def isGoalState(self):
         """
