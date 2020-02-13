@@ -1,3 +1,4 @@
+import util
 # searchAgents.py
 # ---------------
 # Licensing Information:  You are free to use or extend these projects for
@@ -376,9 +377,44 @@ def cornersHeuristic(state, problem):
     """
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+    
+    # Get border of operation
+    xmax = 0
+    ymax = 0
+    xmin = 1
+    ymin = 1
+    for x,y in corners:
+        if(x > xmax):
+            xmax = x
+        if(y > ymax):
+            ymax = y
+    lengthx = xmax - xmin
+    lengthy = ymax - ymin
 
-    "*** YOUR CODE HERE ***"
-    return 0 # Default to trivial solution
+    nd = state[0]
+    # Try to stay at the edge of the maze as much as possible
+    # ie. minimal cost if dist to edge is minimal
+    # distFromCenter = ( (float(nd[0])-lengthx/2)**2 + (float(nd[1])-lengthy/2)**2 )**(0.5) / ( (xmax-xmin)**2 + (ymax-ymin)**2 )**(0.5) # normalized dist to the edge
+    # distFromCenter = ( (float(nd[0])-lengthx/2)**2 + (float(nd[1])-lengthy/2)**2 )**(0.5) + 0.0001 # absolute dist to center (epsilon to prevent divide by 0)
+    # cost = 1/distFromCenter
+    # Does not work: 
+    # 1. Heuristic not 0 at goal
+    # 2. Not always consistent (If while going to a corner, only path is through middle, very large cost is got that can be much higher than 
+    # actual path cost)
+    # Try manhattan dist to center? No, even this can lead to costs sky rocketting at center. Making heuristic not consistent wrt actual path cost (ie greater than path cost)
+
+    # Simple dist to all corners should do. Rather, sum of distances to corners would do. 
+    # 0. More responsive to actual distance of agent from the corner goal (rather than just the edge). Also changes wrt
+    # remining number of goals.
+    # 1. When all four corners are unexplored, heuristic cost will be constant while moving toward first corner
+    # 2. Then, heiristic will drive the agent towards the other three corners and not back toward 4th corner, since
+    # if agent did start to move away, heuristic would start to increase at that point.
+    # 3. Is consistent and admissible of course, since it assumes walls are not a barrier. So always <= actual path cost
+    cost = 0
+    for corn in corners:
+        cost = cost + util.manhattanDistance(nd, corn)
+    cost = cost/len(corners)
+    return cost
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"

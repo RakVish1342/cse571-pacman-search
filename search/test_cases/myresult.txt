@@ -1,4 +1,4 @@
-Starting on 2-13 at 0:09:13
+Starting on 2-13 at 1:19:44
 
 Question q1
 ===========
@@ -126,9 +126,9 @@ Question q5
 Question q6
 ===========
 
-*** FAIL: must use non-trivial heuristic
-*** FAIL: must use non-trivial heuristic
-*** FAIL: must use non-trivial heuristic
+*** FAIL: heuristic non-zero at goal
+*** FAIL: heuristic non-zero at goal
+*** FAIL: heuristic non-zero at goal
 path: ['North', 'East', 'East', 'East', 'East', 'North', 'North', 'West', 'West', 'West', 'West', 'North', 'North', 'North', 'North', 'North', 'North', 'North', 'North', 'West', 'West', 'West', 'West', 'South', 'South', 'East', 'East', 'East', 'East', 'South', 'South', 'South', 'South', 'South', 'South', 'West', 'West', 'South', 'South', 'South', 'West', 'West', 'North', 'East', 'East', 'North', 'North', 'East', 'East', 'East', 'East', 'East', 'East', 'East', 'East', 'South', 'South', 'East', 'East', 'East', 'East', 'East', 'North', 'North', 'East', 'East', 'North', 'North', 'East', 'East', 'North', 'North', 'East', 'East', 'East', 'East', 'South', 'South', 'South', 'South', 'East', 'East', 'North', 'North', 'East', 'East', 'South', 'South', 'South', 'South', 'South', 'North', 'North', 'North', 'North', 'North', 'North', 'North', 'West', 'West', 'North', 'North', 'East', 'East', 'North', 'North']
 path length: 106
 *** FAIL: Heuristic resulted in expansion of 2448 nodes
@@ -152,13 +152,13 @@ Question q8
 
 [SearchAgent] using function depthFirstSearch
 [SearchAgent] using problem type PositionSearchProblem
-*** Method not implemented: findPathToClosestDot at line 506 of searchAgents.py
+*** Method not implemented: findPathToClosestDot at line 542 of searchAgents.py
 *** FAIL: Terminated with a string exception.
 
 ### Question q8: 0/3 ###
 
 
-Finished at 0:09:16
+Finished at 1:19:47
 
 Provisional grades
 ==================
