@@ -340,7 +340,7 @@ class CornersProblem(search.SearchProblem):
             nextNode = (nextx, nexty)
             if not self.walls[nextx][nexty]:
                 # Also check if next node is a corner. If so pass back node with updated visitedCorner state
-                if nextNode in self.corners:
+                if (nextNode in self.corners) and (nextNode not in visitedCorners):
                     successors.append( ( (nextNode, visitedCorners+[nextNode]), action, 1) )
                 else:
                     successors.append( ( (nextNode, visitedCorners), action, 1) )

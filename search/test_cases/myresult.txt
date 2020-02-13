@@ -1,4 +1,4 @@
-Starting on 2-12 at 21:11:19
+Starting on 2-13 at 0:09:13
 
 Question q1
 ===========
@@ -116,39 +116,11 @@ Question q4
 Question q5
 ===========
 
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-dummy
-YAY1
-*** FAIL: test_cases\q5\corner_tiny_corner.test
-*** Corners missed: [(1, 1), (1, 6), (6, 1)]
-*** Tests failed.
+*** PASS: test_cases\q5\corner_tiny_corner.test
+***     pacman layout:          tinyCorner
+***     solution length:                28
 
-### Question q5: 0/3 ###
+### Question q5: 3/3 ###
 
 
 Question q6
@@ -157,25 +129,9 @@ Question q6
 *** FAIL: must use non-trivial heuristic
 *** FAIL: must use non-trivial heuristic
 *** FAIL: must use non-trivial heuristic
-*** FAIL: Exception raised: isGoalState() takes exactly 1 argument (2 given)
-***
-*** Traceback (most recent call last):
-***   File "D:\WORK\ASU\sem2\cse_571_artificial_intel\hw\hw2\PJ1-search\search\grading.py", line 78, in grade
-***     util.TimeoutFunction(getattr(gradingModule, q),1800)(self) # Call the question's function
-***   File "D:\WORK\ASU\sem2\cse_571_artificial_intel\hw\hw2\PJ1-search\search\util.py", line 639, in __call__
-***     result = self.function(*args, **keyArgs)
-***   File "D:\WORK\ASU\sem2\cse_571_artificial_intel\hw\hw2\PJ1-search\search\autograder.py", line 300, in <lambda>
-***     return lambda grades: question.execute(grades)
-***   File "D:\WORK\ASU\sem2\cse_571_artificial_intel\hw\hw2\PJ1-search\search\testClasses.py", line 115, in execute
-***     results.append(f(grades))
-***   File "D:\WORK\ASU\sem2\cse_571_artificial_intel\hw\hw2\PJ1-search\search\autograder.py", line 295, in <lambda>
-***     return lambda grades: testCase.execute(grades, moduleDict, solutionDict)
-***   File "searchTestClasses.py", line 782, in execute
-***     path = search.astar(problem, searchAgents.cornersHeuristic)
-***   File "search.py", line 309, in aStarSearch
-***     if(problem.isGoalState(node)):
-*** TypeError: isGoalState() takes exactly 1 argument (2 given)
-***
+path: ['North', 'East', 'East', 'East', 'East', 'North', 'North', 'West', 'West', 'West', 'West', 'North', 'North', 'North', 'North', 'North', 'North', 'North', 'North', 'West', 'West', 'West', 'West', 'South', 'South', 'East', 'East', 'East', 'East', 'South', 'South', 'South', 'South', 'South', 'South', 'West', 'West', 'South', 'South', 'South', 'West', 'West', 'North', 'East', 'East', 'North', 'North', 'East', 'East', 'East', 'East', 'East', 'East', 'East', 'East', 'South', 'South', 'East', 'East', 'East', 'East', 'East', 'North', 'North', 'East', 'East', 'North', 'North', 'East', 'East', 'North', 'North', 'East', 'East', 'East', 'East', 'South', 'South', 'South', 'South', 'East', 'East', 'North', 'North', 'East', 'East', 'South', 'South', 'South', 'South', 'South', 'North', 'North', 'North', 'North', 'North', 'North', 'North', 'West', 'West', 'North', 'North', 'East', 'East', 'North', 'North']
+path length: 106
+*** FAIL: Heuristic resulted in expansion of 2448 nodes
 
 ### Question q6: 0/3 ###
 
@@ -196,13 +152,13 @@ Question q8
 
 [SearchAgent] using function depthFirstSearch
 [SearchAgent] using problem type PositionSearchProblem
-*** Method not implemented: findPathToClosestDot at line 580 of searchAgents.py
+*** Method not implemented: findPathToClosestDot at line 506 of searchAgents.py
 *** FAIL: Terminated with a string exception.
 
 ### Question q8: 0/3 ###
 
 
-Finished at 21:11:20
+Finished at 0:09:16
 
 Provisional grades
 ==================
@@ -210,12 +166,12 @@ Question q1: 3/3
 Question q2: 3/3
 Question q3: 3/3
 Question q4: 3/3
-Question q5: 0/3
+Question q5: 3/3
 Question q6: 0/3
 Question q7: 0/4
 Question q8: 0/3
 ------------------
-Total: 12/25
+Total: 15/25
 
 Your grades are NOT yet registered.  To register your grades, make sure
 to follow your instructor's guidelines to receive credit on your project.
