@@ -528,8 +528,12 @@ def foodHeuristic(state, problem):
                 problem.heuristicInfo['foodLocations'] = problem.heuristicInfo['foodLocations'] + [(w,h)]
 
     # Attempting min of manhattanDists to all food locations
-    # Yields: 35.5 sec and 13898 node expansions on trickyMaze ("-l trickySearch -p AStarFoodSearchAgent")
-    dists = [util.manhattanDistance(node, food) for food in problem.heuristicInfo['foodLocations']]
+    # Yields: 13898 node expansions in 35.5sec on trickyMaze ("-l trickySearch -p AStarFoodSearchAgent")
+    #dists = [util.manhattanDistance(node, food) for food in problem.heuristicInfo['foodLocations']]
+
+    # Attempting min of mazeDists using helper function given below
+    # Yields: 12372 node expansions in 3min on trickyMaze ("-l trickySearch -p AStarFoodSearchAgent")
+    dists = [mazeDistance(node, food, problem.startingGameState) for food in problem.heuristicInfo['foodLocations']]
     if len(dists) == 0:
         cost = 0
     else:
