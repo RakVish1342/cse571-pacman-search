@@ -115,14 +115,14 @@ def depthFirstSearch(problem):
     """
     moves = [] # move to goal from start state
     closedList = [] # All explored/expanded nodes
-    isInFringe = {} # All nodes explored and being considered, with state of being in fringe currently or not
+    #isInFringe = {} # All nodes explored and being considered, with state of being in fringe currently or not
 
     fringe = util.Stack()
     fringe.push( (problem.getStartState(), moves) ) # Let fringe not only hold nodes to explore, but path/moves to that node from startState
     while(not fringe.isEmpty()):
 
         node, currMoves = fringe.pop()
-        isInFringe[node] = 0
+        #isInFringe[node] = 0
 
         if(problem.isGoalState(node)):
             moves = currMoves
@@ -151,7 +151,7 @@ def depthFirstSearch(problem):
                 # the elif (node not in closedList) condition above will prevent any action from being taken if the 
                 # node is revisited
                 fringe.push( (nd, currMoves+[mv]) )
-                isInFringe[nd] = 1
+                #isInFringe[nd] = 1
 
     return moves
 
@@ -164,14 +164,12 @@ def singleGoalBFS(problem):
     """
     moves = [] # move to goal from start state
     closedList = [] # All explored/expanded nodes
-    isInFringe = {} # All nodes explored and being considered, with state of being in fringe currently or not
 
     fringe = util.Queue()
     fringe.push( (problem.getStartState(), moves) ) # Let fringe not only hold nodes to explore, but path/moves to that node from startState
     while(not fringe.isEmpty()):
 
         node, currMoves = fringe.pop()
-        isInFringe[node] = 0
 
         if(problem.isGoalState(node)):
             moves = currMoves
@@ -193,7 +191,6 @@ def singleGoalBFS(problem):
                 # if ((nd not in isInFringe.keys()) and  (nd not in closedList)):
                 # Condition not needed. Explanation in DFS algo
                 fringe.push( (nd, currMoves+[mv]) )
-                isInFringe[nd] = 1
 
     return moves
 
@@ -259,14 +256,12 @@ def uniformCostSearch(problem):
     """
     moves = [] # move to goal from start state
     closedList = [] # All explored/expanded nodes
-    isInFringe = {} # All nodes explored and being considered, with state of being in fringe currently or not
 
     fringe = util.PriorityQueue()
     fringe.push( (problem.getStartState(), moves), 0 ) # Let fringe not only hold nodes to explore, but path/moves to that node from startState
     while(not fringe.isEmpty()):
 
         node, currMoves = fringe.pop()
-        isInFringe[node] = 0
 
         if(problem.isGoalState(node)):
             moves = currMoves
@@ -283,10 +278,11 @@ def uniformCostSearch(problem):
             for s in successors:
                 nd = s[0] # successor node
                 mv = s[1] # move to the successor node from current node
-                cst = s[2] # cost to successor node
+                #cst = s[2] # cost of successor node from current location. Not needed since cost from start till sucessor is full path cost that UCS/Astar uses
 
-                fringe.push( (nd, currMoves+[mv]), cst )
-                isInFringe[nd] = 1
+                updatedMoves = currMoves + [mv]
+                cst = problem.getCostOfActions(updatedMoves) # cost from start till successor/potential next node
+                fringe.push( (nd, updatedMoves), cst )
 
     return moves
 
@@ -303,14 +299,12 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """
     moves = [] # move to goal from start state
     closedList = [] # All explored/expanded nodes
-    isInFringe = {} # All nodes explored and being considered, with state of being in fringe currently or not
 
     fringe = util.PriorityQueue()
     fringe.push( (problem.getStartState(), moves), 0 ) # Let fringe not only hold nodes to explore, but path/moves to that node from startState
     while(not fringe.isEmpty()):
 
         node, currMoves = fringe.pop()
-        isInFringe[node] = 0
 
         if(problem.isGoalState(node)):
             moves = currMoves
@@ -327,13 +321,12 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             for s in successors:
                 nd = s[0] # successor node
                 mv = s[1] # move to the successor node from current node
-                cst = s[2] # cost to successor node
+                #cst = s[2] # cost of successor node from current location. Not needed since cost from start till sucessor is full path cost that UCS/Astar uses
 
                 updatedMoves = currMoves + [mv]
-                cst = problem.getCostOfActions(updatedMoves) # cost from start till curr node
+                cst = problem.getCostOfActions(updatedMoves) # cost from start till successor/potential next node
                 heu = heuristic(nd, problem) # heuristic of curr node (to goal ofc.)
                 fringe.push( (nd, updatedMoves), cst+heu )
-                isInFringe[nd] = 1
 
     return moves
 
