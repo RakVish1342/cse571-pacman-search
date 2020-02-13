@@ -1,4 +1,3 @@
-import util
 # searchAgents.py
 # ---------------
 # Licensing Information:  You are free to use or extend these projects for
@@ -575,8 +574,30 @@ class ClosestDotSearchAgent(SearchAgent):
         walls = gameState.getWalls()
         problem = AnyFoodSearchProblem(gameState)
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        foodList = []
+        for h in range(food.height):
+            for w in range(food.width):
+                if (food[w][h]):
+                    foodList = foodList + [(w,h)]
+
+        node = startPosition # just to keep variable name of current node/location consistent with previous uses
+        minDist = 999999
+        closestFood = []
+        for f in foodList:
+            dist = util.manhattanDistance(node, f)
+            if( dist < minDist):
+                minDist = dist
+                closestFood = f
+
+        # NOTE: problem has inherited .getStartState(), .isGoalState(), etc via inheritance
+        # This inheritance happens when we pass gameState received in this function to AnyFoodSearchProblem
+        # which in turn inherits from PositionSearchProblem as given in AnyFoodSearchProblem's doc string
+        path = search.bfs(problem) 
+        # Wait, but are we supposed to instead implement Greedy search? Here BFS is also suboptimal
+        # Though this is due to the wrapper function added around it that forces it to find path to closest food
+        # than finding shortest path through all the food
+        return path
+
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -609,10 +630,18 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         The state is Pacman's position. Fill this in with a goal test that will
         complete the problem definition.
         """
+        foodList = []
         x,y = state
+        for h in range(self.food.height):
+            for w in range(self.food.width):
+                if (self.food[w][h]):
+                    foodList = foodList + [(w,h)]
 
-        "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if ((x,y) in foodList):
+            ret = True
+        else:
+            ret = False
+        return ret
 
 def mazeDistance(point1, point2, gameState):
     """
