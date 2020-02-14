@@ -429,10 +429,14 @@ def cornersHeuristic(state, problem):
     # This provides slightly better performance, with an expansion of 1357 nodes
     remainingCorners = set(corners) - set(visitedCorners)
     dists = [util.manhattanDistance(nd, corn) for corn in remainingCorners] # use unvisited corners
+    
+    #dists = [mazeDistance(nd, corn, problem) for corn in remainingCorners]
 
     if len(dists) == 0:
         cost = 0
     else:
+        #cost = min(dists) # min of the distances is not as effective as max of the distances as mentioned in comments/
+        # explanation of foodHeuristics below
         cost = max(dists)
 
     return cost
