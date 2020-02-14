@@ -270,7 +270,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
                 updatedMoves = currMoves + [mv]
                 cst = problem.getCostOfActions(updatedMoves) # cost from start till successor/potential next node
                 heu = heuristic(nd, problem) # heuristic of curr node (to goal ofc.)
-                fringe.push( (nd, updatedMoves), cst+heu )
+                fringe.push( (nd, updatedMoves), cst+heu ) # NOTE: node is NOT ((xy, moves), f_cost), but just (xy, moves). The additional arg on the right is for the priorityQueue to arrange it correctly
 
     return moves
 

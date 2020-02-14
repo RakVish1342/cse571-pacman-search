@@ -410,19 +410,30 @@ def cornersHeuristic(state, problem):
     # 2. Then, heiristic will drive the agent towards the other three corners and not back toward 4th corner, since
     # if agent did start to move away, heuristic would start to increase at that point.
     # 3. Is consistent and admissible of course, since it assumes walls are not a barrier. So always <= actual path cost
-    cost = 0
-    for corn in corners:
-        if corn not in visitedCorners: # Else cost wrt four corners calc everytime. Need to direct agent toward remaining corners only
-            cost = cost + util.manhattanDistance(nd, corn)
+    #cost = 0
+    #for corn in corners:
+    #    if corn not in visitedCorners: # Else cost wrt four corners calc everytime. Need to direct agent toward remaining corners only
+    #        cost = cost + util.manhattanDistance(nd, corn)
 
     # If this normalization is NOT included: First three tests result in: *** FAIL: Inadmissible heuristic ( heuristic larger than path cost)
     # But 4th case passes. ie. expands nodes efficiently. Indicates that heuristic measure/method is good. Just needs to be within proper bounds
     #cost = cost/len(corners)
 
     # If it is included: first three pass, but 4th fails. Takes too many expansions (~2200). Why though? That should not change due to normalization though right?
-    cost = cost/2 # reducing normalization helps decrease node expansions to ~1500. So 4th case still fails. But 2/3 grade obtained.
+    #cost = cost/2 # reducing normalization helps decrease node expansions to ~1500. So 4th case still fails. But 2/3 grade obtained.
     
+    # Max of dist to corners might be a better heu than adding distance to all and normalizing it
+    #dists = [util.manhattanDistance(nd, corn) for corn in corners]
+    # Should use dist to left over nodes. Else heu will be non-zero at goalState...AKA heuristic will still be non-zero after visiting all corners
 
+    # This provides slightly better performance, with an expansion of 1357 nodes
+    remainingCorners = set(corners) - set(visitedCorners)
+    dists = [util.manhattanDistance(nd, corn) for corn in remainingCorners] # use unvisited corners
+
+    if len(dists) == 0:
+        cost = 0
+    else:
+        cost = max(dists)
 
     return cost
 
@@ -544,6 +555,20 @@ def foodHeuristic(state, problem):
         # Using max of dists from curr position to remainig food is a better heuristic.
         # Yields: Just 4137 node expansions in 129.7sec
         cost = max( dists )
+        # Justification: 
+        # 1. When objective is to eat all the dots, the heu should represent the cost/path cost required to eat ALL the dots
+        # it should not matter what the dist is to each individual dot.
+        # 2. So, heu should be an estimate of the dist to cover to eat ALL dots. 
+        # 3. Thus, max manhattan/maze dist dist to the single and furthest dot is a good measure.
+        # 3i. Dist to furthest dot will always be less than sum of dist travelled to eat all the dots
+        # 3ii. It will vary with how far off dots are, so should represent the distance to travel when pacman is in one 
+        # portion of the board eating dots and will eventually have to cross over to the other side of the board.
+        # 3iii. Max maze dist will be an even closer heuristic/better estimate (without overshooting it) 
+        # to the actual cost than max of manhattan cost. But manhattan cost has been chosen for simplicity and faster computation
+        # 4. The min dist to a food dot did not work significantly since it was drastically under estimating the distance pacman 
+        # would need to travel to eat all the dots. It almost had no effect as a heuristic function, since most of the time,
+        # since most of the time the pacman would be only be a small dist away from a given/closest food pellet, but would actually 
+        # need to travel much more to eat all dots. Thus min() was a gross underestimate and not effective at all.
     return cost
 
 class ClosestDotSearchAgent(SearchAgent):
